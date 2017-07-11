@@ -4,33 +4,18 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>Stat Tracker</title>
+  <title>Document</title>
 </head>
 <body>
-  <h1>Product Order Stat Tracker</h1>
-  <hr>
   <fieldset>
-    <legend>Enter Product Statistics</legend>
-    <form action="/activities" method="post">
-      <input type="text" name="order" placeholder="Product Name">
-      <br>
-      <input type="text" name="date" placeholder="Ex. MM/DD/YYYY">
-      <br>
-      <input type="text" name="orderAmount" placeholder="Number Ordered">
-      <br>
-      <button type="submit" name="button">Submit Stats</button>
-    </form>
-  </fieldset>
-  <br>
-  <fieldset>
-    <legend>Previous Orders</legend>
+    <legend>Order Page</legend>
     {{#stats}}
     <div>
       <ul>
         <li>Product: {{order}}</li>
         <li>Date Ordered: {{date}}</li>
         <li>Amount Ordered: {{orderAmount}}</li>
-        <li>Order ID: <a href="./order">{{_id}}</a></li>
+        <li>Order ID: <a href="/order">{{_id}}</a></li>
       </ul>
       <form action="/update" method="post">
         <label for="newName">Updated Name:</label>

@@ -1,16 +1,11 @@
 const mongoose = require('mongoose');
 
 const statTracker = new mongoose.Schema({
-  activity: {type: String, required: true},
-  universe: {type: String, required: true},
-  writer: {type: String, required: true},
-  artist: {type: String, required: true},
-  issue: [{
-    volume: {type: Number, required: true, unique: true},
-    edition: Number,
-  }]
+  order: {type: String, required: true},
+  date: {type: Date, required: true},
+  orderAmount: {type: Number, required: true}
 });
 
-const stats = mongoose.model('stats', statTracker);
+const tracker = mongoose.model('tracker', statTracker);
 
-module.exports = stats;
+module.exports = tracker;
