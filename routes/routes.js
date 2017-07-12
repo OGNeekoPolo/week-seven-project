@@ -1,6 +1,6 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-const statTracker = require('../models/schema');
+const statTracker = require('../models/activities');
 // const passport = require('passport');
 
 const router = express.Router();
@@ -17,7 +17,6 @@ router.get('/', function(req, res) {
 
 router.get('/activities', function(req, res) {
   statTracker.find().then(function(stats) {
-    // console.log(stats);
     res.render('index', {
       stats: stats
     });
@@ -71,7 +70,6 @@ router.get('/activities/:id/details', function(req, res){
   statTracker.findOne({
     _id: id
   }).then(function(stats){
-    // console.log(stats);
     res.render('details', {stats: stats});
   });
 });
