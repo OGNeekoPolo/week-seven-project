@@ -16,8 +16,6 @@
       <br>
       <input type="text" name="date" placeholder="Ex. MM/DD/YYYY">
       <br>
-      <input type="text" name="orderAmount" placeholder="Number Ordered">
-      <br>
       <button type="submit" name="button">Submit Stats</button>
     </form>
   </fieldset>
@@ -29,21 +27,8 @@
       <ul>
         <li>Product: {{order}}</li>
         <li>Date Ordered: {{date}}</li>
-        <li>Amount Ordered: {{orderAmount}}</li>
-        <li>Order ID: <a href="./order">{{_id}}</a></li>
+        <li>Order ID: <a href="/activities/{{_id}}">{{_id}}</a></li>
       </ul>
-      <form action="/update" method="post">
-        <label for="newName">Updated Name:</label>
-        <input type="text" name="newName">
-        <br>
-        <label for="newAmount">Update Anount:</label>
-        <input type="text" name="newAmount">
-        <br>
-        <button type="submit" name="update" value={{_id}}>Update</button>
-      </form>
-      <form action="/delete" method="post">
-        <button type="submit" name="delete" value={{_id}}>Delete</button>
-      </form>
     </div>
     {{/stats}}
   </fieldset>

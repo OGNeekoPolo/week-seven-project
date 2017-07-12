@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Stat Tracker - Details</title>
+</head>
+<body>
+  <fieldset>
+    <legend>Add Details</legend>
+    {{#stats}}
+    <div>
+      <ul>
+        <li>Product: {{order}}</li>
+        <li>Date Ordered: {{date}}</li>
+        <li>Order ID: <a href="/activities/{{_id}}">{{_id}}</a></li>
+      </ul>
+      {{#details}}
+      <h5>Order Details</h5>
+      <ul>
+        <li>Order Amount: {{orderAmount}}</li>
+        <li>Ordered By: {{orderPerson}}</li>
+      </ul>
+      <br>
+      <form action="/detail_delete" method="post">
+        <button type="submit" name="deleteDetails" value={{_id}}>Delete Details</button>
+      </form>
+      {{/details}}
+
+      {{^details}}
+      <form action="/activities/{{_id}}/details" method="post">
+        <label for="orderAmount">Order Amount:</label>
+        <br>
+        <input type="text" name="orderAmount">
+        <br>
+        <br>
+        <label for="orderPerson">Ordered By:</label>
+        <br>
+        <input type="text" name="orderPerson">
+        <br>
+        <br>
+        <button type="submit" name="details" value={{_id}}>Submit Details</button>
+      </form>
+      {{/details}}
+    </div>
+    {{/stats}}
+  </fieldset>
+
+</body>
+</html>

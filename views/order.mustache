@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>Document</title>
+  <title>Stat Tracker - Order Page</title>
 </head>
 <body>
   <fieldset>
@@ -14,20 +14,23 @@
       <ul>
         <li>Product: {{order}}</li>
         <li>Date Ordered: {{date}}</li>
-        <li>Amount Ordered: {{orderAmount}}</li>
-        <li>Order ID: <a href="/order">{{_id}}</a></li>
+        <li>Order ID: <a href="/activities/{{_id}}">{{_id}}</a></li>
+        {{#details}}
+        <li>Order Amount: {{orderAmount}}</li>
+        <li>Ordered By: {{orderPerson}}</li>
+        {{/details}}
       </ul>
       <form action="/update" method="post">
         <label for="newName">Updated Name:</label>
         <input type="text" name="newName">
         <br>
-        <label for="newAmount">Update Anount:</label>
-        <input type="text" name="newAmount">
-        <br>
         <button type="submit" name="update" value={{_id}}>Update</button>
       </form>
       <form action="/delete" method="post">
         <button type="submit" name="delete" value={{_id}}>Delete</button>
+      </form>
+      <form action="/activities/{{_id}}/details" method="get">
+        <button type="submit" name="details">Add Details</button>
       </form>
     </div>
     {{/stats}}
