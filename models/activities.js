@@ -1,10 +1,14 @@
 const mongoose = require('mongoose');
 
-const Users = new mongoose.Schema({
-  username: String,
-  password: String
-});
+const statTracker = new mongoose.Schema({
+   order: {type: String, required: true},
+   date: {type: Date, required: true},
+   details: [{
+    orderAmount: Number,
+    orderPerson: String,
+  }]
+ });
 
-const users = mongoose.model('user', Users);
+const tracker = mongoose.model('tracker', statTracker);
 
-module.exports = users;
+module.exports = tracker;
