@@ -14,7 +14,9 @@
     "bcrypt": "^1.0.2",
     "bluebird": "^3.5.0",
     "body-parser": "^1.17.2",
+    "crypto": "0.0.3",
     "express": "^4.15.3",
+    "express-session": "^1.15.3",
     "mongoose": "^4.11.1",
     "mustache-express": "^1.2.5",
     "passport": "^0.3.2"

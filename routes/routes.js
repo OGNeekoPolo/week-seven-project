@@ -1,18 +1,61 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const statTracker = require('../models/activities');
+const appUsers = require('../models/users');
+
 // const passport = require('passport');
 
 const router = express.Router();
 
 
-router.use(bodyParser.urlencoded({
-  extended: true
-}));
+
+router.use(bodyParser.urlencoded({extended: true}));
+
+let sess;
 
 
 router.get('/', function(req, res) {
-  res.redirect('/activities');
+  sess = req.session;
+  if (sess.username) {
+    res.redirect('/activities');
+  } else {
+    res.render('register');
+  }
+});
+
+router.post('/', function(req, res){
+  sess = req.session;
+  let newUser = new appUsers({
+    username: req.body.username,
+    password: req.body.password
+  });
+  newUser.save().then(function(user){
+    sess.username = user.username;
+    sess.password = user.password;
+    console.log(sess);
+    res.redirect('/activities');
+  });
+});
+
+router.get('/login', function(req, res){
+  sess = req.session;
+  if (sess.username) {
+    res.redirect('/activities');
+  } else {
+    res.render('login');
+  }
+});
+
+router.post('/login', function(req, res){
+  sess = req.session;
+  appUsers.findOne({
+    username: req.body.username,
+    password: req.body.password
+  }).then(function(user){
+    sess.username = user.username;
+    sess.password = user.password;
+    res.redirect('/activities');
+  });
 });
 
 router.get('/activities', function(req, res) {
