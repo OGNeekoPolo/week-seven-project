@@ -3,8 +3,6 @@ const bodyParser = require('body-parser');
 const statTracker = require('../models/activities');
 const appUsers = require('../models/users');
 
-// const passport = require('passport');
-
 const router = express.Router();
 
 
@@ -25,16 +23,20 @@ router.get('/', function(req, res) {
 
 router.post('/', function(req, res){
   sess = req.session;
-  let newUser = new appUsers({
-    username: req.body.username,
-    password: req.body.password
-  });
-  newUser.save().then(function(user){
-    sess.username = user.username;
-    sess.password = user.password;
-    console.log(sess);
-    res.redirect('/activities');
-  });
+  if (req.body.password !== req.body.confirm) {
+    res.send('Your passwords do not match.');
+  } else {
+    let newUser = new appUsers({
+      username: req.body.username,
+      password: req.body.password
+    });
+    newUser.save().then(function(user){
+      sess.username = user.username;
+      sess.password = user.password;
+      console.log(sess);
+      res.redirect('/activities');
+    });
+  }
 });
 
 router.get('/login', function(req, res){
@@ -49,21 +51,35 @@ router.get('/login', function(req, res){
 router.post('/login', function(req, res){
   sess = req.session;
   appUsers.findOne({
-    username: req.body.username,
-    password: req.body.password
-  }).then(function(user){
-    sess.username = user.username;
-    sess.password = user.password;
-    res.redirect('/activities');
-  });
-});
-
-router.get('/activities', function(req, res) {
-  statTracker.find().then(function(stats) {
-    res.render('index', {
-      stats: stats
+    username: req.body.loginName,
+  }, function(err, user){
+      if (err) throw err;
+      user.comparePassword(req.body.loginPassword, function(err, isMatch){
+        if (err){
+          throw err;
+        } else if (isMatch) {
+          sess.username = user.username;
+          sess.password = user.password;
+          // console.log(sess);
+          // console.log('Password is a match', isMatch);
+          res.redirect('/activities');
+        }
+      });
     });
   });
+
+
+router.get('/activities', function(req, res) {
+  sess = req.session;
+  if (sess.username) {
+    statTracker.find().then(function(stats) {
+      res.render('index', {
+        stats: stats
+      });
+    });
+  } else {
+    res.redirect('/');
+  }
 });
 
 router.post('/activities', function(req, res) {
@@ -97,24 +113,35 @@ router.post('/delete', function(req, res) {
 });
 
 router.get('/activities/:id', function(req, res) {
-  let id = req.params.id;
-  statTracker.findOne({
-    _id: id
-  }).then(function(stats) {
-    // console.log(stats);
-    res.render('order', {
-      stats: stats
+  sess = req.session;
+  if (sess.username) {
+    let id = req.params.id;
+    statTracker.findOne({
+      _id: id
+    }).then(function(stats) {
+      // console.log(stats);
+      res.render('order', {
+        stats: stats
+      });
     });
-  });
+  } else {
+    res.redirect('/');
+  }
 });
 
 router.get('/activities/:id/details', function(req, res){
-  let id = req.params.id;
-  statTracker.findOne({
-    _id: id
-  }).then(function(stats){
-    res.render('details', {stats: stats});
-  });
+  sess = req.session;
+  if (sess.username) {
+    let id = req.params.id;
+    statTracker.findOne({
+      _id: id
+    }).then(function(stats){
+      res.json(stats);
+      // res.render('details', {stats: stats});
+    });
+  } else {
+    res.redirect('/');
+  }
 });
 
 router.post('/activities/:id/details', function(req, res){
@@ -140,6 +167,17 @@ router.post('/detail_delete', function(req, res){
     stat.save().then(function(){
       res.redirect('/');
     });
+  });
+});
+
+router.post('/logout', function(req, res){
+  sess = req.session;
+  sess.destroy(function(err){
+    if (err) {
+      console.log(err);
+    } else {
+      res.redirect('/');
+    }
   });
 });
 

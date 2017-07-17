@@ -20,6 +20,13 @@ appUsers.pre('save', function(next){
     });
 });
 
+appUsers.methods.comparePassword = function(candidatePassword, cb) {
+    bcrypt.compare(candidatePassword, this.password, function(err, isMatch) {
+        if (err) return cb(err);
+        cb(null, isMatch);
+    });
+};
+
 const users = mongoose.model('users', appUsers);
 
 module.exports = users;
